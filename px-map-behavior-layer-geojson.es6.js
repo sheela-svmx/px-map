@@ -360,29 +360,36 @@
         var currentTargetId = evt.target.feature.id;
       }
 
-      var clickBounds = L.latLngBounds(evt.latlng, evt.latlng);
-      console.log(clickBounds);
+      var intersectionRadius = 25;  // make this an option?
+      var radius = (19 - evt.target._map.getZoom()) * intersectionBounds;
+      var circularBounds = evt.latlng.toBounds(radius);
+      L.circle(evt.latlng, radius, {color: "red", weight: 1}).addTo(this.elementInst);
+      console.log(circularBounds);
+
       var intersectingRoutes = [];
-
       var layers = this.elementInst.getLayers();
-      var layersArr = [];
-      var boudsArr = [];
-      layers.forEach(tl => {
-        boudsArr.push(tl.getBounds().pad(0.6));
-      });
-      console.log("Bounds array");
-      console.log(boudsArr);
+
       layers.forEach(l => {
-        console.log("debug");
-        if (clickBounds.intersects(l.getBounds())) {
-          intersectingRoutes.push(l.feature.id);
+        console.log("layer", l);
+        if (circularBounds.intersects(l.getBounds())) {
+          console.warn('found match', l);
+          if (l.feature) {
+            intersectingRoutes.push(l.feature);
+          }
         }
-        layersArr.push(l.getBounds());
       });
 
-      console.log("intersecting routes");
-      console.log("Bounds array", boudsArr);
+      if (intersectingRoutes.length > 1) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        console.log("intersecting routes", intersectingRoutes);
+        const popupContent = intersectingRoutes.map(feature => feature.customPopup.content);
+        console.warn('popupContent', popupContent);
 
+        //showPopupAtPoint(evt.latLng, popupContent);
+      }
+
+      // highlight the route that was clicked on.
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
