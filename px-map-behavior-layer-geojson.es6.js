@@ -377,8 +377,11 @@
         if (clickBounds.intersects(l.getBounds())) {
           intersectingRoutes.push(l.feature.id);
         }
-        // layersArr.push(l.getBounds());
+        layersArr.push(l.getBounds());
       });
+
+      console.log("intersecting routes");
+      console.log("Bounds array", boudsArr);
 
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('showFeatureProperties', 'true');
