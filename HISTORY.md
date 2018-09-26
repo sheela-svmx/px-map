@@ -1,3 +1,8 @@
+v3.15.4
+===================
+## Enhancement:
+* Provide ability to toggle the pop up
+* Set `opened` property to null to close all popups.
 
 v3.15.2
 ===================
