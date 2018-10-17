@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Copyright (c) 2018, General Electric
@@ -16,14 +15,13 @@
  * limitations under the License.
  */
 
-
-(function () {
+(function() {
   /** **************************************************************************
    * BEHAVIORS
    *************************************************************************** */
 
   /* Ensures the behavior namespace is created */
-  window.PxMapBehavior = (window.PxMapBehavior || {});
+  window.PxMapBehavior = window.PxMapBehavior || {};
 
   /**
    *
@@ -49,7 +47,7 @@
        */
       data: {
         type: Object,
-        observer: 'shouldUpdateInst',
+        observer: "shouldUpdateInst"
       },
 
       /**
@@ -77,7 +75,7 @@
        */
       featureStyle: {
         type: Object,
-        observer: 'shouldUpdateInst',
+        observer: "shouldUpdateInst"
       },
 
       /**
@@ -94,8 +92,8 @@
       showFeatureProperties: {
         type: Boolean,
         value: false,
-        observer: 'shouldUpdateInst',
-      },
+        observer: "shouldUpdateInst"
+      }
     },
 
     /**
@@ -113,7 +111,11 @@
     },
 
     canAddInst() {
-      return this.data && typeof this.data === 'object' && Object.keys(this.data).length;
+      return (
+        this.data &&
+        typeof this.data === "object" &&
+        Object.keys(this.data).length
+      );
     },
 
     // extends the layer `addInst` method to harvest and fire events
@@ -123,14 +125,14 @@
       const removedFn = this._handleFeatureRemoved.bind(this);
       this.bindEvents({
         layeradd: addedFn,
-        layerremove: removedFn,
+        layerremove: removedFn
       });
 
       // If any layers already added before events bound, manually fire layer
       // added events to attach listeners/notify the world the layer is added
       if (this.elementInst.getLayers().length !== 0) {
-        this.elementInst.eachLayer((layer) => {
-          this.elementInst.fire('layeradd', { layer });
+        this.elementInst.eachLayer(layer => {
+          this.elementInst.fire("layeradd", { layer });
         });
       }
 
@@ -143,9 +145,14 @@
 
       const geojsonLayer = L.geoJson(options.data, {
         pointToLayer: (feature, latlng) => {
-          const featureProperties = feature.properties && feature.properties.style || {};
+          const featureProperties =
+            (feature.properties && feature.properties.style) || {};
           const attributeProperties = options.featureStyle;
-          const style = this._getStyle(feature, featureProperties, attributeProperties);
+          const style = this._getStyle(
+            feature,
+            featureProperties,
+            attributeProperties
+          );
 
           return new L.CircleMarker(latlng, style);
         },
@@ -155,11 +162,12 @@
           this._bindPopup(feature, layer);
         },
 
-        style: (feature) => {
-          const featureProperties = feature.properties && feature.properties.style || {};
+        style: feature => {
+          const featureProperties =
+            (feature.properties && feature.properties.style) || {};
 
           return this._getStyle(featureProperties, styleAttributeProperties);
-        },
+        }
       });
 
       return geojsonLayer;
@@ -168,31 +176,58 @@
     _getStyle(featureProperties, attributeProperties) {
       return {
         radius: featureProperties.radius || attributeProperties.radius || 5,
-        color: featureProperties.color || attributeProperties.color || '#3E87E8', // primary-blue,
-        fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', // $dv-light-blue
+        color:
+          featureProperties.color || attributeProperties.color || "#3E87E8", // primary-blue,
+        fillColor:
+          featureProperties.fillColor ||
+          attributeProperties.fillColor ||
+          "#88BDE6", // $dv-light-blue
         weight: featureProperties.weight || attributeProperties.weight || 4,
         opacity: featureProperties.opacity || attributeProperties.opacity || 1,
-        fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4,
+        fillOpacity:
+          featureProperties.fillOpacity ||
+          attributeProperties.fillOpacity ||
+          0.4
       };
     },
 
     _bindFeaturePopups() {
       if (!this.elementInst) return;
-      this.elementInst.eachLayer(layer => this._bindPopup(layer.feature, layer));
+      this.elementInst.eachLayer(layer =>
+        this._bindPopup(layer.feature, layer)
+      );
     },
 
     _bindPopup(feature, layer) {
-      const customPopup = feature.customPopup;
+      const customPopup = feature ? feature.customPopup : "";
+      let popupDataKeys;
 
       if (customPopup) {
-        const popup = new PxMap.InfoPopup(JSON.parse(JSON.stringify(customPopup)));
+        const popup = new PxMap.InfoPopup(
+          JSON.parse(JSON.stringify(customPopup))
+        );
         return layer.bindPopup(popup);
       }
 
       // Filter keys to remove info that should not be displayed in a popup.
       // If no keys remain, do not bind a popup.
-      const popupDataKeys = Object.keys(feature.properties).filter(key => feature.properties.hasOwnProperty(key) && feature.properties[key] !== 'unset' && key !== 'style');
-      if (!popupDataKeys.length) return;
+      if (feature && feature.properties) {
+        popupDataKeys =
+          Object.keys(feature.properties).filter(
+            key =>
+              feature.properties.hasOwnProperty(key) &&
+              feature.properties[key] !== "unset" &&
+              key !== "style"
+          ) || [];
+      } else {
+        const testPopup = new PxMap.InfoPopup({
+          title: "Feature Properties",
+          description: "SHeel atest",
+          autoPanPadding: [1, 1]
+        });
+        return layer.bindPopup(testPopup);
+      }
+      if (!popupDataKeys || !popupDataKeys.length) return;
 
       const popupData = popupDataKeys.reduce((accum, key) => {
         accum[key] = feature.properties[key];
@@ -200,9 +235,9 @@
       }, {});
 
       const popup = new PxMap.DataPopup({
-        title: 'Feature Properties',
+        title: "Feature Properties",
         data: popupData,
-        autoPanPadding: [1, 1],
+        autoPanPadding: [1, 1]
       });
 
       layer.bindPopup(popup);
@@ -214,7 +249,7 @@
     },
 
     _unbindPopup(layer) {
-      if (typeof layer.getPopup() !== 'undefined') {
+      if (typeof layer.getPopup() !== "undefined") {
         layer.unbindPopup();
       }
     },
@@ -227,11 +262,15 @@
     updateInst(lastOptions, nextOptions) {
       if (!Object.keys(nextOptions.data).length) {
         this.elementInst.clearLayers();
-      } else if (Object.keys(nextOptions.data).length && (lastOptions.dataHash !== nextOptions.dataHash || lastOptions.featureStyleHash !== nextOptions.featureStyleHash)) {
+      } else if (
+        Object.keys(nextOptions.data).length &&
+        (lastOptions.dataHash !== nextOptions.dataHash ||
+          lastOptions.featureStyleHash !== nextOptions.featureStyleHash)
+      ) {
         const styleAttributeProperties = this.getInstOptions().featureStyle;
 
         this.elementInst.clearLayers();
-        this.elementInst.options.style = (feature) => {
+        this.elementInst.options.style = feature => {
           const featureProperties = feature.properties.style || {};
           return this._getStyle(featureProperties, styleAttributeProperties);
         };
@@ -240,7 +279,9 @@
         if (nextOptions.showFeatureProperties) {
           this._bindFeaturePopups();
         }
-      } else if (lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties) {
+      } else if (
+        lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties
+      ) {
         if (nextOptions.showFeatureProperties) this._bindFeaturePopups();
         if (!nextOptions.showFeatureProperties) this._unbindFeaturePopups();
       }
@@ -252,7 +293,7 @@
         dataHash: JSON.stringify(this.data || {}),
         featureStyle: this.featureStyle || {},
         featureStyleHash: JSON.stringify(this.featureStyle || {}),
-        showFeatureProperties: this.showFeatureProperties,
+        showFeatureProperties: this.showFeatureProperties
       };
     },
 
@@ -261,7 +302,7 @@
       let objectToAppendWeight = {};
       let objectToAppendColor = {};
       let featureObject;
-      geoData.features.map((obj) => {
+      geoData.features.map(obj => {
         if (obj.id === currentTargetId) {
           featureObject = obj;
         }
@@ -274,18 +315,18 @@
       objectToAppendWeight.properties.style = {
         weight: 4,
         opacity: 0.7,
-        color: currentRouteColor,
+        color: currentRouteColor
       };
 
       objectToAppendHighlight.properties.style = {
         weight: 4,
-        color: 'rgba(0, 0, 0, 0.5)',
+        color: "rgba(0, 0, 0, 0.5)"
       };
 
       objectToAppendColor.properties.style = {
         weight: 2,
         opacity: 1,
-        color: 'white',
+        color: "white"
       };
 
       geoData.features.push(objectToAppendWeight);
@@ -299,15 +340,15 @@
       if (!evt || !evt.layer) return;
 
       // Bind layer click events
-      evt.layer.on('click', this._handleFeatureTapped.bind(this));
-      evt.layer.on('popupopen', this._handleFeaturePopupOpened.bind(this));
-      evt.layer.on('popupclose', this._handleFeaturePopupClosed.bind(this));
+      evt.layer.on("click", this._handleFeatureTapped.bind(this));
+      evt.layer.on("popupopen", this._handleFeaturePopupOpened.bind(this));
+      evt.layer.on("popupclose", this._handleFeaturePopupClosed.bind(this));
 
       const detail = {};
       if (evt.layer && evt.layer.feature) {
         detail.feature = evt.layer.feature;
       }
-      this.fire('px-map-layer-geojson-feature-added', detail);
+      this.fire("px-map-layer-geojson-feature-added", detail);
     },
     /**
      * Fired when a feature is attached the map. Note that every feature is
@@ -329,7 +370,7 @@
       if (evt.layer && evt.layer.feature) {
         detail.feature = evt.layer.feature;
       }
-      this.fire('px-map-layer-geojson-feature-removed', detail);
+      this.fire("px-map-layer-geojson-feature-removed", detail);
     },
     /**
      * Fired when a feature is removed from the map. Note that every feature is
@@ -342,9 +383,9 @@
      */
 
     _handleFeatureTapped(evt) {
-      this.set('showFeatureProperties', 'false');
+      this.set("showFeatureProperties", "false");
 
-      var features = this.data.features
+      var features = this.data.features;
       var featureIdObj = {};
       var uniqueFeatureArr = [];
       for (var feature in features) {
@@ -359,33 +400,64 @@
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
+      /*
+        So We are calculating the circular bounds, just drawing an area on the map
+        and see if 2 routes intersect or along the same route,These numbers
+        came from trial and error to get the right amount of bounds
+      */
+      var intersectionRadius = 25; // make this an option?
+      var radius = (19 - evt.target._map.getZoom()) * intersectionRadius;
+      var circularBounds = evt.latlng.toBounds(radius);
 
-      var clickBounds = L.latLngBounds(evt.latlng, evt.latlng);
-      console.log(clickBounds);
       var intersectingRoutes = [];
-
       var layers = this.elementInst.getLayers();
-      var layersArr = [];
-      var boudsArr = [];
-      layers.forEach(tl => {
-        boudsArr.push(tl.getBounds().pad(0.6));
-      });
-      console.log("Bounds array");
-      console.log(boudsArr);
+
+      var uniqueLayers = [];
+
+      /*
+        The reason I need to have a uniq object is because when a pop up is added to the elemtInst,
+        It adds another layer to the map, and when get Bounds is calculated it throws
+        an error so I am iterating over the layer object wheich ar ein the unique layerObj
+      */
+      var uniqueLayerObj = {};
+
       layers.forEach(l => {
-        console.log("debug");
-        if (clickBounds.intersects(l.getBounds())) {
-          intersectingRoutes.push(l.feature.id);
+        if (l.feature) {
+          if (!uniqueLayerObj[l.feature.id]) {
+            uniqueLayerObj[l.feature.id] = l.feature.id;
+            uniqueLayers.push(l);
+          }
         }
-        layersArr.push(l.getBounds());
       });
+      /*
+        Here we push the features that are intersecting
+      */
+      uniqueLayers.forEach(l => {
+        if (circularBounds.intersects(l.getBounds())) {
+          if (l.feature) {
+            intersectingRoutes.push(l.feature);
+          }
+        }
+      });
+      var popup = L.popup();
+      if (intersectingRoutes.length > 1) {
+        /*
+        If the intersecting routes is more than one then display the custom pop up.This is where something is going wrong
+        I need to figure out
+        */
+        popup
+          .setLatLng(evt.latlng)
+          .setContent("You clicked the map at " + evt.latlng.toString())
+          .addTo(this.elementInst);
+      }
 
-      console.log("intersecting routes");
-      console.log("Bounds array", boudsArr);
-
-      const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
-      this.set('showFeatureProperties', 'true');
-      this.set('data', JSON.parse(JSON.stringify(geoData)));
+      // highlight the route that was clicked on.
+      const geoData = this.highlightSelectedFeature(
+        this.data,
+        currentTargetId,
+        currentRouteColor
+      );
+      this.set("data", JSON.parse(JSON.stringify(geoData)));
 
       const detail = {};
       if (evt.target && evt.target.feature) {
@@ -393,7 +465,7 @@
         detail.latlng = evt.latlng;
         detail.routeSegmentId = currentTargetId;
       }
-      this.fire('px-map-layer-geojson-feature-tapped', detail);
+      this.fire("px-map-layer-geojson-feature-tapped", detail);
     },
     /**
      * Fired when a feature is tapped by the user.
@@ -409,7 +481,7 @@
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
       }
-      this.fire('px-map-layer-geojson-feature-popup-opened', detail);
+      this.fire("px-map-layer-geojson-feature-popup-opened", detail);
     },
     /**
      * Fired when a feature's popup is opened by the user.
@@ -425,8 +497,8 @@
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
       }
-      this.fire('px-map-layer-geojson-feature-popup-closed', detail);
-    },
+      this.fire("px-map-layer-geojson-feature-popup-closed", detail);
+    }
 
     /**
      * Fired when a feature's popup is closed by the user.
@@ -441,6 +513,6 @@
   /** @polymerBehavior */
   PxMapBehavior.GeoJSONLayer = [
     PxMapBehavior.Layer,
-    PxMapBehavior.GeoJSONLayerImpl,
+    PxMapBehavior.GeoJSONLayerImpl
   ];
-}());
+})();
