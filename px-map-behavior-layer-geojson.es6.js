@@ -182,7 +182,7 @@
           featureProperties.fillColor ||
           attributeProperties.fillColor ||
           "#88BDE6", // $dv-light-blue
-        weight: featureProperties.weight || attributeProperties.weight || 4,
+        weight: featureProperties.weight || attributeProperties.weight || 7,
         opacity: featureProperties.opacity || attributeProperties.opacity || 1,
         fillOpacity:
           featureProperties.fillOpacity ||
@@ -206,7 +206,12 @@
         const popup = new PxMap.InfoPopup(
           JSON.parse(JSON.stringify(customPopup))
         );
-        return layer.bindPopup(popup);
+        if (this._isHandleFeatureTapped) {
+          //wait until the map layer render
+          setTimeout(() => {
+            return layer.bindPopup(popup).openPopup();
+          }, 0);
+        }
       }
 
       // Filter keys to remove info that should not be displayed in a popup.
@@ -240,7 +245,15 @@
         autoPanPadding: [1, 1]
       });
 
-      layer.bindPopup(popup);
+      if (this._isHandleFeatureTapped) {
+        if (customPopup) return;
+        //wait until the map layer render
+        setTimeout(() => {
+          layer.bindPopup(popup).openPopup();
+          //reset it, so prevents popup open on next data re-render
+          this._isHandleFeatureTapped = false;
+        }, 0);
+      }
     },
 
     _unbindFeaturePopups() {
@@ -251,6 +264,7 @@
     _unbindPopup(layer) {
       if (typeof layer.getPopup() !== "undefined") {
         layer.unbindPopup();
+        this._isHandleFeatureTapped = false;
       }
     },
 
@@ -313,13 +327,13 @@
       objectToAppendHighlight = JSON.parse(JSON.stringify(featureObject));
 
       objectToAppendWeight.properties.style = {
-        weight: 4,
+        weight: 7,
         opacity: 0.7,
         color: currentRouteColor
       };
 
       objectToAppendHighlight.properties.style = {
-        weight: 4,
+        weight: 7,
         color: "rgba(0, 0, 0, 0.5)"
       };
 
@@ -383,7 +397,8 @@
      */
 
     _handleFeatureTapped(evt) {
-      this.set("showFeatureProperties", "false");
+      //need this to handle popup open/close state
+      this._isHandleFeatureTapped = true;
 
       var features = this.data.features;
       var featureIdObj = {};
@@ -443,7 +458,7 @@
       if (intersectingRoutes.length > 1) {
         /*
         If the intersecting routes is more than one then display the custom pop up.This is where something is going wrong
-        I need to figure out
+        I need to figure out also this new pop up appears only on dowble click
         */
         popup
           .setLatLng(evt.latlng)

@@ -582,6 +582,11 @@
         reflectToAttribute: true,
         value: 'info',
         observer: '_updateMarkerIcon'
+      },
+      icon: {
+        type: String,
+        value: 'px-utl:location',
+        observer: '_updateMarkerIcon'
       }
     },
 
@@ -618,6 +623,7 @@
     _getMarkerIconOptions() {
       let options = {
         type: this.type || '',
+        icon: this.icon || '',
         styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined
       };
 

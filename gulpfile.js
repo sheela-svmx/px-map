@@ -71,7 +71,7 @@ gulp.task('sass', function() {
     }))
     .pipe(ensureLicense())
     .pipe(gulp.dest('css'))
-    .pipe(browserSync.stream({ match: 'css/*.html' }));
+    .pipe(browserSync.stream({ match: 'css/*.html', once: true }));
 });
 
 gulp.task('watch', function() {

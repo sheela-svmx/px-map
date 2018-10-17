@@ -69,8 +69,14 @@
        * how the map will calculate its zoom level when fitting markers.
        * Choose from the following options (default is 'max'):
        *
-       *    * 'max' - the map will zoom to the lowest level that fits all markers (but not past the map's `maxZoom`)
-       *    * 'min' - the map will zoom to the highest level that fits all markers (but not past the map's `minZoom`)
+       *    * 'max' - the map will zoom out to `minZoom` level regardless of
+       *      currently rendered markers
+       *    * 'min' - the map will attempt to zoom in to the lowest level (within
+       *      the `maxZoom` setting) that fits all markers, provided the markers
+       *      are rendered close together.
+       *    * 'auto' - the map will zoom in our out to the whatever level it
+       *      needs to fit all rendered markers (within the map's `minZoom` or
+       *     `maxZoom`)
        *
        * @type {String}
        */
@@ -154,7 +160,7 @@
           this.listen(localEvt.rootTarget, 'px-map-marker-group-removed', '_handleMarkerGroupRemoved');
         }
 
-        this._knownMarkers.set(localEvt.rootTarget.elementInst, localEvt.event.detail.bounds);
+        this._knownMarkers.set(this.elementInst, localEvt.event.detail.bounds);
         this._fitMapToMarkersIfSet();
       }
     },
@@ -186,11 +192,24 @@
         if (!this._knownMarkers || !this._knownMarkers.size) return;
 
         const bounds = this._markersToBoundsWithPadding(this._knownMarkers, this.fitToMarkersPadding);
-
         if (bounds && bounds.isValid()) {
-          let latLng = bounds.getCenter();
-          let zoom = this._getZoomLevelForFit(bounds, this.fitToMarkersZoom, this.elementInst);
+          const latLng = bounds.getCenter();
+          const zoom = this._getZoomLevelForFit(bounds, this.fitToMarkersZoom, this.elementInst);
           this.elementInst.setView(latLng, zoom);
+
+          /**
+           * This setTimeout is added because of a leaflet known issue when
+           *  changing both zoom level and map center at the same time. In rare
+           * cases where the new center is already in view, and a zoom level is
+           * being passed in, the map will not center properly.
+           * Ref: https://github.com/Leaflet/Leaflet/issues/3249#issuecomment-75931374
+           */
+          const mapInst = this.elementInst;
+          setTimeout(function() {
+            if (mapInst.getCenter() !== latLng) {
+              mapInst.panTo(latLng);
+            }
+          }, 300);
         }
       }, 10);
     },
@@ -207,8 +226,8 @@
      */
     _markersToBoundsWithPadding(markersMap, padding) {
       if (!markersMap || !markersMap.size) return;
-
       let bounds = L.latLngBounds();
+
       markersMap.forEach(value => {
         if (value instanceof L.LatLng || value instanceof L.LatLngBounds) {
           bounds.extend(value);
@@ -226,20 +245,27 @@
      * Takes a bounds, fit setting, zoom level, and map instance, and returns a
      * new zoom level for the map.
      *
+     * Note: A setting of 'auto' can now be used for all zoom levels
+     *
      * @param {L.LatLngBounds} bounds
      * @param {String} fitSetting - see `fitToMarkersZoom` property for more details
      * @param {L.Map} map
      * @return {Number}
      */
     _getZoomLevelForFit(bounds, fitSetting, map) {
+      let zoom;
+
       if (fitSetting === 'min') {
-        let zoom = map.getMinZoom() || 0;
-        return zoom;
+        zoom = map.getMinZoom() || 0;
+      } else if (fitSetting === 'max') {
+        zoom = map.getBoundsZoom(bounds, true) - 2;
+      } else {
+        // Temporarily set the "inside" param of getBoundsZoom to be false, as leaflet is
+        // reversing this setting in their code when determining the correct direction to zoom.
+        zoom = map.getBoundsZoom(bounds, false);
       }
-      if (fitSetting === 'max') {
-        let zoom = map.getBoundsZoom(bounds, true) - 2;
-        return zoom;
-      }
+
+      return zoom;
     },
 
     /**
@@ -584,13 +610,13 @@
       }
 
       if (lastOptions.maxZoom !== nextOptions.maxZoom && !isNaN(nextOptions.maxZoom)) {
-        this.setMaxZoom(nextOptions.maxZoom);
+        this.elementInst.setMaxZoom(nextOptions.maxZoom);
       }
       if (lastOptions.minZoom !== nextOptions.minZoom && !isNaN(nextOptions.minZoom)) {
-        this.setMinZoom(nextOptions.minZoom);
+        this.elementInst.setMinZoom(nextOptions.minZoom);
       }
       if (lastOptions.maxBounds !== nextOptions.maxBounds && !isNaN(nextOptions.maxBounds)) {
-        this.setMaxBounds(nextOptions.maxBounds);
+        this.elementInst.setMaxBounds(nextOptions.maxBounds);
       }
 
       if (!lastOptions.dragging && nextOptions.dragging) {
@@ -725,7 +751,8 @@
      *   * {Number} detail.lat - Latitude of the map centerpoint after moving
      *   * {Number} detail.lng - Longitude of the map centerpoint after moving
      *   * {Number} detail.zoom - Zoom level of the map after moving
-     *   * {L.LatLngBounds} detail.bounds - Custom Leaflet object describing the visible bounds of the map as a rectangle
+     *   * {L.LatLngBounds} detail.bounds - Custom Leaflet object describing
+     *     the visible bounds of the map as a rectangle
      *
      * @event px-map-moved
      */

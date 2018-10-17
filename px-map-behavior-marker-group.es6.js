@@ -70,7 +70,7 @@
       data: {
         type: Object,
         observer: 'shouldUpdateInst'
-      },
+        },
 
       /**
        * Internal representation of the colorsByType object. See `_calculateColorsByType`.
@@ -282,6 +282,8 @@
 
     updateInst(lastOptions, nextOptions) {
       if (nextOptions.data) {
+        // Clear all markers and data, so you get the updated _markersRef
+        this._clearAllMarkersAndData(this.elementInst);
         const features = this._syncDataWithMarkers(nextOptions.data.features, this.elementInst);
         this._notifyNewFeatures(features);
       }
@@ -300,7 +302,10 @@
               // _fireEventOnMarkerOrVisibleParentCluster & _unspiderfyPreviousClusterIfNotParentOf
               this.async(() => {
                 // spiderfying only the clustered marker
-                if(selectedFeature.__parent._markers.length > 1) {
+                if(selectedFeature
+                    && selectedFeature.__parent
+                    && selectedFeature.__parent._markers
+                    && selectedFeature.__parent._markers.length > 1) {
                   this._fireEventOnMarkerOrVisibleParentCluster(selectedFeature);
                 } else {
                   this._bindAndOpenPopup(selectedFeature);
@@ -309,6 +314,8 @@
               });
             }
           };
+        } else {
+          this._markerCloseAllPopups();
         }
       }
 
@@ -365,7 +372,9 @@
         maxClusterRadius: 150,
         spiderifyOnMaxZoom: true,
         removeOutsideVisibleBounds: true,
-        animate: true,
+        // After map zoom out, spidering not happening due to _inZoomAnimation returning true
+        // hence turning off the clustering animate
+        animate: false,
         polygonOptions: {
           stroke: true,
           color: this.getComputedStyleValue('--internal-px-map-marker-group-cluster-polygon-stroke-color'),
@@ -624,6 +633,7 @@
       clusterInst.clearLayers();
       this._features = null;
       this._markers = null;
+      this._markersRef = null;
     },
 
     /**
@@ -643,7 +653,12 @@
       const markersMap = this._markers = (this._markers || new WeakMap());
       const markersRef = this._markersRef = (this._markersRef || []);
 
-      const {featuresToAdd, featuresToUpdate, featuresToRemove, nextFeaturesSet, nextMarkersMap} = this._diffNewFeatures(newFeatures, featuresSet, markersMap);
+      const {
+        featuresToAdd,
+        featuresToUpdate,
+        featuresToRemove,
+        nextFeaturesSet,
+        nextMarkersMap } = this._diffNewFeatures(newFeatures, featuresSet, markersMap);
 
       let feature, cachedMarker, markersToOperate;
 
@@ -952,6 +967,9 @@
       marker.bindPopup(popup).openPopup();
       marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
       marker.on('popupclose', marker.__boundCloseFn);
+
+      // TODO: Investigate (JIRA:UI-2535) reason opened prop doesnt udpate/goes in loop.
+      // this.opened = marker.id;
     },
 
     _unbindAndClosePopup(marker) {
@@ -964,6 +982,12 @@
       // dehydrate opened prop so,
       // upon map click closed popup opens back again on item click
       this.opened = null;
+    },
+
+    // close all popups on the mapInstance
+    _markerCloseAllPopups() {
+      const pxMapEl = document.getElementsByTagName('px-map')[0];
+      pxMapEl.elementInst.closePopup();
     },
 
     /**

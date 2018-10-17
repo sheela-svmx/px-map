@@ -55,15 +55,23 @@ limitations under the License.
       <!-- Component ---------------------------------------------------------->
       <px-demo-component slot="px-demo-component">
         <div style="height:400px;width:600px;display:flex">
-          <px-map flex-to-size fit-to-markers disable-scroll-zoom disable-touch-zoom attribution-prefix='<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap contributors</a>'>
+          <px-map flex-to-size fit-to-markers disable-scroll-zoom disable-touch-zoom
+            attribution-prefix='<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | &copy; <a href="http://osm.org/copyright">OpenStreetMap contributors</a>'
+            fit-to-markers-padding="{{props.fitToMarkersPadding.value}}"
+            fit-to-markers-zoom="{{props.fitToMarkersZoom.value}}"
+          >
             <px-map-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-map-tile-layer>
-            <px-map-marker-group name="Bus stop data" data="{{props.data.value}}"></px-map-marker-group>
+            <px-map-marker-group name="Bus stop data" data="{{props.markerGroupData.value}}"></px-map-marker-group>
+            <px-map-control-zoom position="bottomright"></px-map-control-zoom>
           </px-map>
         </div>
       </px-demo-component>
       <!-- END Component ------------------------------------------------------>
 
-      <px-demo-component-snippet slot="px-demo-component-snippet" element-properties="{{props}}" element-name="px-map-marker-group"
+      <px-demo-component-snippet
+        slot="px-demo-component-snippet"
+        element-properties="{{props}}"
+        element-name="px-map-marker-group"
         links-includes='["px-map/px-map.html","px-map/px-map-tile-layer.html","px-map/px-map-marker-group.html","px-d3-imports/px-polygit-imports-d3.html"]'>
       </px-demo-component-snippet>
     </px-demo-interactive>
@@ -81,6 +89,20 @@ limitations under the License.
   Polymer({
     is: 'px-map-marker-group-demo',
 
+    created: function() {
+      const initProps = this.configs[0];
+      const propsToSet = [
+        'fitToMarkersPadding',
+        'fitToMarkersZoom',
+        'markerGroupData'
+      ];
+      propsToSet.forEach(key => {
+        if (initProps[key]) {
+          this.set(`props.${key}.value`, initProps[key]);
+        }
+      });
+    },
+
     properties: {
 
       /**
@@ -95,8 +117,6 @@ limitations under the License.
         value: function () { return this.demoProps; }
       },
 
-
-
       /**
        * An array of pre-configured `props` that can be used to provide the user
        * with a set of common examples. These configs will be made available
@@ -110,10 +130,3340 @@ limitations under the License.
         type: Array,
         value: function () {
           return [
-            {
-              configName: "Basic",
-              configReset: true
-            },
+          {
+              configName: "City",
+              configReset: true,
+              fitToMarkersZoom: 'auto',
+              markerGroupData: {
+                "type": "FeatureCollection",
+                "features": [
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24042573",
+                        "32.67445793"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Cabrillo National Monument",
+                      "marker-icon": {
+                        "icon-base": "custom-icon",
+                        "icon-type": "px-nav:unconfirmed",
+                        "icon-strokeColor": "blue",
+                        "icon-fillColor": "white",
+                        "icon-content": "1",
+                      },
+                      "marker-popup": {
+                        "popup-base": "data-popup",
+                        "popup-title": "Cabrillo National Monument",
+                        "popup-opened": "true",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "600",
+                        "popup-minWidth": "500",
+                        "popup-data": {
+                          "LAT": "32.67445793",
+                          "LNG": "-117.24042573",
+                          "STATE": "warning"
+                        }
+                      }
+                    },
+                    "id": "10001"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.27618677",
+                        "32.83957829"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Pearl St & Draper Av",
+                      "marker-icon": {
+                        "icon-base": "custom-icon",
+                        "icon-type": "px-nav:unconfirmed",
+                        "icon-strokeColor": "blue",
+                        "icon-fillColor": "white",
+                        "icon-content": "2",
+                      }
+                    },
+                    "id": "10003"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.2738099",
+                        "32.84012848"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Pearl St & Fay Av",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10004"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.26867322",
+                        "32.8458467"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Torrey Pines Rd & Exchange Pl",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "important",
+                      }
+                    },
+                    "id": "10006"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.26175158",
+                        "32.84931178"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Torrey Pines Rd & Hillside Dr",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10007"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24825013",
+                        "32.79810093"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Everts St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10011"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24583394",
+                        "32.79652904"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Grand Av & Fanuel St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10012"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24277358",
+                        "32.79929398"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Haines St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "info",
+                      }
+                    },
+                    "id": "10013"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24120249",
+                        "32.79965017"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Ingraham St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "important",
+                      }
+                    },
+                    "id": "10015"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.23906319",
+                        "32.80012359"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Jewell St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10016"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.23574899",
+                        "32.74506671"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Voltaire St & Mendocino St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10020"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.23556667",
+                        "32.80087716"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Lamont St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10023"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.23353563",
+                        "32.74286905"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Voltaire St & San Clemente St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10024"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.23174882",
+                        "32.8017129"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Noyes St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10025"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22970402",
+                        "32.73814733"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Chatsworth Bl & Tennyson St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10026"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22929493",
+                        "32.74025595"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Voltaire St & Poinsettia Dr",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10027"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22673314",
+                        "32.75266115"
+                      ]
+                    },
+                    "properties": {
+                      "title": "West Point Loma Bl & Adrian St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10029"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.2265353",
+                        "32.72894288"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Nimitz Bl & Rosecrans St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10031"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22584945",
+                        "32.80091313"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Grand Av & Culver St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "info",
+                      }
+                    },
+                    "id": "10032"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22407745",
+                        "32.75340225"
+                      ]
+                    },
+                    "properties": {
+                      "title": "West Point Loma Bl & Loma Riviera Dr",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10033"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22518324",
+                        "32.86829317"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Nobel Dr & Lebon Dr",
+                      "marker-icon": {
+                        "icon-base": "custom-icon",
+                        "icon-type": "px-nav:unconfirmed",
+                        "icon-strokeColor": "blue",
+                        "icon-fillColor": "white",
+                        "icon-content": "px-nav:home"
+                      }
+                    },
+                    "id": "10034"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.22121375",
+                        "32.805504"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Bond St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10036"
+                  }
+                ]
+              }
+            },{
+              configName: "Country",
+              configReset: true,
+              fitToMarkersPadding: 0.10,
+              fitToMarkersZoom: 'auto',
+              markerGroupData: {
+                "type": "FeatureCollection",
+                "features": [
+                  {
+                    "dataType": "resource",
+                    "geometry": { "coordinates": [104.061278, 30.676555], "type": "Point" },
+                    "id": "4281b786-659b-4dfc-a58f-66cec4619f1c",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "info"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description":
+                          "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>R-cd</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "4281b786-659b-4dfc-a58f-66cec4619f1c"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": { "coordinates": [121.488892, 31.225344], "type": "Point" },
+                    "id": "b17690b0-ddeb-4e99-a901-9254243ac2eb",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "info"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description":
+                          "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>R-sh</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "b17690b0-ddeb-4e99-a901-9254243ac2eb"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": { "coordinates": [111.275018, 30.70312], "type": "Point" },
+                    "id": "d10db605-419a-4cbd-8671-829d8143b844",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "info"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description":
+                          "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>R-yc</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "d10db605-419a-4cbd-8671-829d8143b844"
+                    },
+                    "type": "Feature"
+                  }
+                ]
+              }
+            },{
+              configName: "International",
+              configReset: true,
+              fitToMarkersPadding: 0.20,
+              fitToMarkersZoom: 'auto',
+              markerGroupData: {
+                "type": "FeatureCollection",
+                "features": [
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24042573",
+                        "32.67445793"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Cabrillo National Monument",
+                      "marker-icon": {
+                        "icon-base": "custom-icon",
+                        "icon-type": "px-nav:unconfirmed",
+                        "icon-strokeColor": "blue",
+                        "icon-fillColor": "white",
+                        "icon-content": "1",
+                      },
+                      "marker-popup": {
+                        "popup-base": "data-popup",
+                        "popup-title": "Cabrillo National Monument",
+                        "popup-opened": "true",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "600",
+                        "popup-minWidth": "500",
+                        "popup-data": {
+                          "LAT": "32.67445793",
+                          "LNG": "-117.24042573",
+                          "STATE": "warning"
+                        }
+                      }
+                    },
+                    "id": "10001"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.27618677",
+                        "32.83957829"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Pearl St & Draper Av",
+                      "marker-icon": {
+                        "icon-base": "custom-icon",
+                        "icon-type": "px-nav:unconfirmed",
+                        "icon-strokeColor": "blue",
+                        "icon-fillColor": "white",
+                        "icon-content": "2",
+                      }
+                    },
+                    "id": "10003"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.2738099",
+                        "32.84012848"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Pearl St & Fay Av",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10004"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.26867322",
+                        "32.8458467"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Torrey Pines Rd & Exchange Pl",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "important",
+                      }
+                    },
+                    "id": "10006"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.26175158",
+                        "32.84931178"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Torrey Pines Rd & Hillside Dr",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10007"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24825013",
+                        "32.79810093"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Everts St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "unknown",
+                      }
+                    },
+                    "id": "10011"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24583394",
+                        "32.79652904"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Grand Av & Fanuel St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "warning",
+                      }
+                    },
+                    "id": "10012"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "-117.24277358",
+                        "32.79929398"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Garnet Av & Haines St",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "info",
+                      }
+                    },
+                    "id": "10013"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "121.445119",
+                        "31.241338"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Jade Buddha Temple",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "important",
+                      }
+                    },
+                    "id": "20001"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "121.475528",
+                        "31.228320"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Shanghai Museum",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "info",
+                      }
+                    },
+                    "id": "20002"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "121.451963",
+                        "31.173713"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Longhua Pagoda",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "important",
+                      }
+                    },
+                    "id": "20003"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "121.490201",
+                        "31.242811"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Waibaidu Bridge",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "info",
+                      }
+                    },
+                    "id": "20004"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "121.541090",
+                        "31.217961"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Shanghai Science & Technology Museum",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "important",
+                      }
+                    },
+                    "id": "20005"
+                  },
+                  {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        "121.436097",
+                        "31.191279"
+                      ]
+                    },
+                    "properties": {
+                      "title": "Xujiahui Saint Ignatius Cathedral",
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "info",
+                      }
+                    },
+                    "id": "20006"
+                  },
+                ]
+              }
+            }, {
+              configName: "Zoom Fit",
+              configReset: true,
+              fitToMarkersPadding: 0.30,
+              fitToMarkersZoom: 'auto',
+              markerGroupData: {
+                "type": "FeatureCollection",
+                "features": [
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946689,
+                        37.251748
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "24cf52cc-ae0b-421f-8eac-c9ecbaae87ea",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-0"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000116</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "24cf52cc-ae0b-421f-8eac-c9ecbaae87ea"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946598,
+                        37.252145
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "29e385d3-7d17-4d3d-9454-b643433e3ea8",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000118</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "29e385d3-7d17-4d3d-9454-b643433e3ea8"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946598,
+                        37.252145
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "898c7509-fcca-44b5-8797-65e0c1a7ad9a",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-0"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000122</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "898c7509-fcca-44b5-8797-65e0c1a7ad9a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.911659,
+                        37.34697
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ce1c8b65-57fd-4e02-b83b-67cab1f25878",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000123</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "ce1c8b65-57fd-4e02-b83b-67cab1f25878"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -97.865636,
+                        30.232814
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "74819535-4211-4a78-95f8-69f413aad8ba",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-2"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000125</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "74819535-4211-4a78-95f8-69f413aad8ba"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.902549,
+                        37.683499
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "9d4ea7f4-dfe3-4ad5-8d56-2cc38163db2b",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000126</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "9d4ea7f4-dfe3-4ad5-8d56-2cc38163db2b"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946689,
+                        37.251748
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8da7e4f3-fc06-45c4-b8a2-85ca652154a0",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-0"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000128</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "8da7e4f3-fc06-45c4-b8a2-85ca652154a0"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946689,
+                        37.251748
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "41cb1a26-fc55-43a9-a669-744060d10362",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-0"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000129</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "41cb1a26-fc55-43a9-a669-744060d10362"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946598,
+                        37.252145
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "dbee72b1-894b-46bb-a02b-6cd4ba90b86c",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000130</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "dbee72b1-894b-46bb-a02b-6cd4ba90b86c"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.946689,
+                        37.251748
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6f321b9d-c69d-4826-b472-e5ed1c28ba17",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000131</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "6f321b9d-c69d-4826-b472-e5ed1c28ba17"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -122.677155,
+                        45.519113
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a829fbe9-3627-4b78-abd0-50ea8f5f0386",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000132</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "a829fbe9-3627-4b78-abd0-50ea8f5f0386"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.971102,
+                        37.389272
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a7f17f95-5672-450c-bf44-a511aa4cc497",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-2"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000137</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "a7f17f95-5672-450c-bf44-a511aa4cc497"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -122.080913,
+                        37.399341
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "cadda727-d064-4edc-b6b7-7ca90ba01195",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000140</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "cadda727-d064-4edc-b6b7-7ca90ba01195"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        103.830941,
+                        1.302085
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f99fc81a-6513-4039-8044-49e83a20ff6a",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000141</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "f99fc81a-6513-4039-8044-49e83a20ff6a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.883581,
+                        37.66724
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b5d2f9a5-cf99-41f9-ba3a-81a5bb66a40a",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000142</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "b5d2f9a5-cf99-41f9-ba3a-81a5bb66a40a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -122.677214,
+                        45.519194
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "7e43b2c3-54c5-4b9d-a536-9319be9e1986",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000143</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "7e43b2c3-54c5-4b9d-a536-9319be9e1986"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -79.437493,
+                        36.090545
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "87e3a221-2e70-4f56-8567-12c46c04c903",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000144</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "87e3a221-2e70-4f56-8567-12c46c04c903"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -122.080866,
+                        37.399434
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2a2dddee-6af1-4d8c-9557-7f56316d2681",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000146</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "2a2dddee-6af1-4d8c-9557-7f56316d2681"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.978015,
+                        37.779927
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6b6a7c07-226e-4e8e-a0b1-b094b212cb31",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000147</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "6b6a7c07-226e-4e8e-a0b1-b094b212cb31"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -97.865636,
+                        30.232814
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "47da16a5-1f7f-459d-8644-5386516e2039",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-2"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000149</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "47da16a5-1f7f-459d-8644-5386516e2039"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -121.960781,
+                        37.333802
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "d140a203-f87d-406d-af6d-8f32364b5f2d",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000153</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "d140a203-f87d-406d-af6d-8f32364b5f2d"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -122.025353,
+                        37.04364
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2efa1c02-e388-445e-a856-bf8d6de14fae",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-0"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000155</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "2efa1c02-e388-445e-a856-bf8d6de14fae"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -122.083377,
+                        37.079444
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b8bca9af-7734-48bf-8fba-d7fb7cd63232",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-2"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000156</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "b8bca9af-7734-48bf-8fba-d7fb7cd63232"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "job",
+                    "geometry": {
+                      "coordinates": [
+                        -76.746444,
+                        39.331971
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "efd1ee8d-5de2-466d-90e1-dd4e84663706",
+                    "properties": {
+                      "marker-icon": {
+                        "icon-base": "static-icon",
+                        "icon-type": "custom-1"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>WO-00000166</span><br/><b></b></span>"
+                      },
+                      "markerType": "job",
+                      "uuid": "efd1ee8d-5de2-466d-90e1-dd4e84663706"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.419416,
+                        37.77493
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8af66dad-fac7-442b-b97d-af19cfe1622a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>David Lambert</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8af66dad-fac7-442b-b97d-af19cfe1622a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.236355,
+                        37.485215
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "3a3f7262-8019-4019-9bcd-510cdda004c9",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Doug Bourn</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "3a3f7262-8019-4019-9bcd-510cdda004c9"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -77.565072,
+                        43.126822
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8a440661-af14-40ef-a7c2-6e3455e88398",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Lisa Mizel</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8a440661-af14-40ef-a7c2-6e3455e88398"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -84.428355,
+                        33.658972
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8929dfc7-2690-4fb3-91c3-bfe9d8aa91db",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Samuel Coogan</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8929dfc7-2690-4fb3-91c3-bfe9d8aa91db"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -72.928016,
+                        41.316216
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f74da51a-c2ec-4cba-a45a-04b5d2925497",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Sean McComb</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "f74da51a-c2ec-4cba-a45a-04b5d2925497"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -76.337068,
+                        42.969402
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6be381a1-09aa-4210-a523-a6122524d5ba",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Steve Walker</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "6be381a1-09aa-4210-a523-a6122524d5ba"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.971819,
+                        37.389925
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "acec7ab2-8cf0-43a8-a76b-c36afae6437d",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Alan Carr</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "acec7ab2-8cf0-43a8-a76b-c36afae6437d"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.966887,
+                        37.387058
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "bf1bdf71-877e-42b4-9c98-3861169e386a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Bill Walter</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "bf1bdf71-877e-42b4-9c98-3861169e386a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.973997,
+                        37.391236
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8c1578e6-9c13-4d74-a9ba-b80a92da4b07",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Chris Selent</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8c1578e6-9c13-4d74-a9ba-b80a92da4b07"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -89.675805,
+                        40.779447
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b92dacc0-97b7-466a-8618-bf0ce8168d56",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Dieter Meier</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "b92dacc0-97b7-466a-8618-bf0ce8168d56"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.874679,
+                        37.662431
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ed3af93f-5181-4034-8018-49bbadc9a686",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Jack Thompson</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "ed3af93f-5181-4034-8018-49bbadc9a686"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.96116,
+                        37.387401
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "e5e0e50e-c649-4aaf-b7f7-16022ba1e5fb",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Steve Robertz</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "e5e0e50e-c649-4aaf-b7f7-16022ba1e5fb"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.906402,
+                        37.423458
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "82576e52-e193-4eff-bf36-9825ae4dbd86",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Amanda Celestine</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "82576e52-e193-4eff-bf36-9825ae4dbd86"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.902347,
+                        37.689149
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0d823de8-4984-4210-8a80-06ca32d7c061",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Brian Heath</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "0d823de8-4984-4210-8a80-06ca32d7c061"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.716965,
+                        38.461709
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0e283b9c-e6dd-445f-aa90-4703e374500f",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Christine Molina</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "0e283b9c-e6dd-445f-aa90-4703e374500f"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.769131,
+                        38.562045
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "cedef8ee-6946-4dda-86e9-dcb4d2c49730",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>David Gould</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "cedef8ee-6946-4dda-86e9-dcb4d2c49730"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.273952,
+                        37.800472
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "01cf2bed-cec9-4aec-ae52-52a55f808c23",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Edgar Guy</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "01cf2bed-cec9-4aec-ae52-52a55f808c23"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.227998,
+                        37.456964
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "5e3800d5-313f-47a8-a2b0-4f32acca7de9",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Katlyn Wynne</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "5e3800d5-313f-47a8-a2b0-4f32acca7de9"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.391494,
+                        38.424107
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a8f14375-1ca2-4281-a061-b401d40c2d75",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Nilas Bauer</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "a8f14375-1ca2-4281-a061-b401d40c2d75"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.013592,
+                        37.555883
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "13b585db-1881-4673-a8f6-124441f31691",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Roberta Goh</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "13b585db-1881-4673-a8f6-124441f31691"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.87099,
+                        37.316065
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "fbcb62d3-b834-4827-be8f-09ea8bb4a233",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Theresa Bolin</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "fbcb62d3-b834-4827-be8f-09ea8bb4a233"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.646363,
+                        37.120583
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "cd651b2c-a226-4a20-a374-43579d20bba0",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Thomas Lancing</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "cd651b2c-a226-4a20-a374-43579d20bba0"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.375402,
+                        28.545413
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ff30ca3f-06d2-4000-bdf3-9df8cc166288",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Andrea Barrett</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "ff30ca3f-06d2-4000-bdf3-9df8cc166288"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -80.198535,
+                        26.111941
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f2eb2008-c67e-40c0-8f3f-23749c5bf1ab",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Breanna Janacek</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "f2eb2008-c67e-40c0-8f3f-23749c5bf1ab"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.358071,
+                        28.599907
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "e0dcac00-de6b-4931-b97e-6a4a5665bd8e",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Brianna Kosher</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "e0dcac00-de6b-4931-b97e-6a4a5665bd8e"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -80.12303,
+                        26.735454
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0bc8e690-f209-4ae7-8bb2-204221424923",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Danielle McCarthy</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "0bc8e690-f209-4ae7-8bb2-204221424923"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.716971,
+                        30.102861
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a62b03c4-3d61-482f-a9cb-1b2b99699c12",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Dorothy Ketchum</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "a62b03c4-3d61-482f-a9cb-1b2b99699c12"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.719664,
+                        30.118501
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2d01432d-28f5-4199-b291-d1ad1d304162",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Jeffrey Anderson</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "2d01432d-28f5-4199-b291-d1ad1d304162"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.333555,
+                        28.759868
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "bead0950-b63d-4b5e-96a6-e51f7b3f3778",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Kevin Barr</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "bead0950-b63d-4b5e-96a6-e51f7b3f3778"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -80.169607,
+                        26.25767
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "006b7a61-0330-4431-baef-596ec05bc5a0",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Meredith Hock</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "006b7a61-0330-4431-baef-596ec05bc5a0"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.056634,
+                        29.204381
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "baf6f1d8-8659-4323-9406-d4ce3690dfb7",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Richard Atkinson</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "baf6f1d8-8659-4323-9406-d4ce3690dfb7"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.376778,
+                        28.481111
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "9fb938f2-0992-4e5e-80e2-2b4a0f7f9af3",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Vanessa Persia</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "9fb938f2-0992-4e5e-80e2-2b4a0f7f9af3"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -118.262264,
+                        34.041575
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "cffa6f63-d05f-4d79-9e17-1e68d382347d",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Daryl Dixon</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "cffa6f63-d05f-4d79-9e17-1e68d382347d"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -118.262264,
+                        34.041575
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ff43f9f9-e021-4640-a198-15eea1c2fb8a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Glenn Rhee</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "ff43f9f9-e021-4640-a198-15eea1c2fb8a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -118.262264,
+                        34.041575
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "5186a8e1-7c41-45d4-9e46-d6cede523956",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Rick Grimes</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "5186a8e1-7c41-45d4-9e46-d6cede523956"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -73.985358,
+                        40.735753
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "716b2b4d-08b2-4470-a829-609f072ef208",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Andrea Boulter</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "716b2b4d-08b2-4470-a829-609f072ef208"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -73.990755,
+                        40.750547
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "1fd4f393-9089-4cb0-9a40-0e6a4b68c1b0",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Ruth Amos</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "1fd4f393-9089-4cb0-9a40-0e6a4b68c1b0"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -69.331661,
+                        45.1752
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "5dc25e01-7d4d-4b09-b7c5-100c69b4452f",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Sandra Dunn</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "5dc25e01-7d4d-4b09-b7c5-100c69b4452f"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -73.949443,
+                        40.762381
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f22db31b-92c9-4e11-b429-f25c90d074bf",
+                    "properties": {
+                      "isCrew": true,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-obj:truck",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><span>Support Team</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "f22db31b-92c9-4e11-b429-f25c90d074bf"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.883789,
+                        37.697181
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f05b40ca-29f6-4c8c-b8a2-91f27f114f16",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Melinda Morgan</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "f05b40ca-29f6-4c8c-b8a2-91f27f114f16"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.883789,
+                        37.697181
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "220cc46d-c771-4950-9daa-0380ef2b6e3b",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Simon Scott</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "220cc46d-c771-4950-9daa-0380ef2b6e3b"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -76.315471,
+                        39.546865
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "1e7e94a9-e3b3-4f91-a81c-3637553152be",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Cyrus Sherman</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "1e7e94a9-e3b3-4f91-a81c-3637553152be"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -76.315471,
+                        39.546865
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8eff0c65-b2d4-48dc-9a44-96fcfd9b21d5",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Donald Freeman</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8eff0c65-b2d4-48dc-9a44-96fcfd9b21d5"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -76.315471,
+                        39.546865
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "4273815f-dcec-4bf3-aef0-f7b2b0eb3150",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Jane Carpenter</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "4273815f-dcec-4bf3-aef0-f7b2b0eb3150"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -78.762373,
+                        39.637379
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "9dc2f7a2-474a-4014-b8e7-78ad0579886a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>John Ogden</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "9dc2f7a2-474a-4014-b8e7-78ad0579886a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -76.315471,
+                        39.546865
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a4b9434c-e197-4449-9145-79c9b5924651",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Max Christie</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "a4b9434c-e197-4449-9145-79c9b5924651"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -84.394487,
+                        33.762626
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "1fe42fb9-8d06-4a35-b2e3-8be4052d90b7",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Carol Netscher</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "1fe42fb9-8d06-4a35-b2e3-8be4052d90b7"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -80.036869,
+                        32.884635
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0376385c-9f3d-470b-86a9-9c5753558162",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Fiona Rodger</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "0376385c-9f3d-470b-86a9-9c5753558162"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -78.657974,
+                        35.789611
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8ce67b03-b833-496a-ba1b-c4f071071b8a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Fitri Mohamad</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8ce67b03-b833-496a-ba1b-c4f071071b8a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -80.944165,
+                        35.223517
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "78dc4555-2a43-4f84-9c6e-c9e99e985d4c",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Michael Reiss</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "78dc4555-2a43-4f84-9c6e-c9e99e985d4c"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -81.654571,
+                        41.39337
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "4b818b76-dfea-469d-865b-f74db82d7030",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Andre Berghoff</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "4b818b76-dfea-469d-865b-f74db82d7030"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -90.344155,
+                        38.637805
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2cbcd826-192e-4435-ae62-85f84bf21e3a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Harold Traub</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "2cbcd826-192e-4435-ae62-85f84bf21e3a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -83.675367,
+                        42.307688
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ddb7250d-3a8d-4f84-9544-77f4b32fcf69",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Jeffrey Larson</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "ddb7250d-3a8d-4f84-9544-77f4b32fcf69"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.335899,
+                        47.581004
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "95c10c08-bbd5-41e4-8b44-c514999a4538",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Arthur Frank</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "95c10c08-bbd5-41e4-8b44-c514999a4538"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.460454,
+                        45.543025
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "9046e2d0-73e7-424c-9455-c2a95471227b",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Emma Newall</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "9046e2d0-73e7-424c-9455-c2a95471227b"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -123.09308,
+                        44.046956
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8a1b1b7b-e6a5-4a7d-b420-f826d1f06a7a",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Stephen Jones</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8a1b1b7b-e6a5-4a7d-b420-f826d1f06a7a"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.16961,
+                        37.430497
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f0a1988e-4661-417b-bcc1-405257fdcc42",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Michael Smith</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "f0a1988e-4661-417b-bcc1-405257fdcc42"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.886329,
+                        37.338208
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "c99626c9-536a-4b53-ac1e-1a3f6f5e6796",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Scott Techmann</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "c99626c9-536a-4b53-ac1e-1a3f6f5e6796"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.942675,
+                        37.775706
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2f4f31b9-366c-4f72-ae9c-0daeacd50dfe",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Stacey Offerlein</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "2f4f31b9-366c-4f72-ae9c-0daeacd50dfe"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.972456,
+                        37.389382
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a2459736-bbde-4d6a-85bc-149cf5a13f50",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Jim Scott</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "a2459736-bbde-4d6a-85bc-149cf5a13f50"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -122.668396,
+                        38.275612
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "17b84bd4-5798-409c-acd4-522a15612c87",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Steve Paulding</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "17b84bd4-5798-409c-acd4-522a15612c87"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -121.971875,
+                        37.389991
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "d285f135-afe4-45a0-80d2-c756213330ec",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Terry Butler</b></br><span>Technician</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "d285f135-afe4-45a0-80d2-c756213330ec"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -0.099014,
+                        51.366899
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "248416ed-2748-47b6-939f-b7abc836f156",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Ashley Kent</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "248416ed-2748-47b6-939f-b7abc836f156"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        0.028107,
+                        51.588003
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8774b2fe-624b-4cfe-91eb-966812ea0511",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Roni Malek</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "8774b2fe-624b-4cfe-91eb-966812ea0511"
+                    },
+                    "type": "Feature"
+                  },
+                  {
+                    "dataType": "resource",
+                    "geometry": {
+                      "coordinates": [
+                        -0.310238,
+                        51.7518
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ff52223a-e68b-4001-bb14-fdfe3ce6e5a9",
+                    "properties": {
+                      "isCrew": false,
+                      "marker-icon": {
+                        "icon-base": "symbol-icon",
+                        "icon-icon": "px-nav:generic-user",
+                        "icon-type": "custom-4"
+                      },
+                      "marker-popup": {
+                        "popup-base": "info-popup",
+                        "popup-margin": "10px",
+                        "popup-maxWidth": "300",
+                        "popup-minWidth": "50",
+                        "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px;\"><b>Sheila King</b></br><span>Equipment</span></span>"
+                      },
+                      "markerType": "resource",
+                      "uuid": "ff52223a-e68b-4001-bb14-fdfe3ce6e5a9"
+                    },
+                    "type": "Feature"
+                  }
+                ]
+              }
+            }
           ]
         }
       },
@@ -151,462 +3501,26 @@ limitations under the License.
      * @type {Object}
      */
     demoProps: {
-      name: {
-        type: String,
-        defaultValue: 'Bus stop data',
-        inputType: 'text'
+      markerGroupData: {
+        type: Object,
+        inputType: 'code:JSON'
       },
 
-      data: {
-        type: Object,
-        inputType: 'code:JSON',
-        defaultValue: {
-          "type": "FeatureCollection",
-          "features": [
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.24042573",
-                  "32.67445793"
-                ]
-              },
-              "properties": {
-                "title": "Cabrillo National Monument",
-                "marker-icon": {
-                  "icon-base": "custom-icon",
-                  "icon-type": "px-nav:unconfirmed",
-                  "icon-strokeColor": "blue",
-                  "icon-fillColor": "white",
-                  "icon-content": "1",
+      fitToMarkersPadding: {
+        type: Number,
+        inputType: 'number',
+        defaultValue: 0.15
+      },
 
-                },
-                "marker-popup": {
-                  "popup-base": "data-popup",
-                  "popup-title": "Cabrillo National Monument",
-                  "popup-opened": "true",
-                  "popup-margin": "10px",
-                  "popup-maxWidth": "600",
-                  "popup-minWidth": "500",
-                  "popup-data": {
-                    "LAT": "32.67445793",
-                    "LNG": "-117.24042573",
-                    "STATE": "warning"
-                  }
-                }
-              },
-              "id": "10001"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.27618677",
-                  "32.83957829"
-                ]
-              },
-              "properties": {
-                "title": "Pearl St & Draper Av",
-                "marker-icon": {
-                  "icon-base": "custom-icon",
-                  "icon-type": "px-nav:unconfirmed",
-                  "icon-strokeColor": "blue",
-                  "icon-fillColor": "white",
-                  "icon-content": "2",
-                }
-              },
-              "id": "10003"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.2738099",
-                  "32.84012848"
-                ]
-              },
-              "properties": {
-                "title": "Pearl St & Fay Av",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10004"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.26867322",
-                  "32.8458467"
-                ]
-              },
-              "properties": {
-                "title": "Torrey Pines Rd & Exchange Pl",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "important",
-
-                }
-              },
-              "id": "10006"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.26175158",
-                  "32.84931178"
-                ]
-              },
-              "properties": {
-                "title": "Torrey Pines Rd & Hillside Dr",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10007"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.24825013",
-                  "32.79810093"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Everts St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10011"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.24583394",
-                  "32.79652904"
-                ]
-              },
-              "properties": {
-                "title": "Grand Av & Fanuel St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10012"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.24277358",
-                  "32.79929398"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Haines St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "info",
-
-                }
-              },
-              "id": "10013"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.24120249",
-                  "32.79965017"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Ingraham St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "important",
-
-                }
-              },
-              "id": "10015"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.23906319",
-                  "32.80012359"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Jewell St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10016"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.23574899",
-                  "32.74506671"
-                ]
-              },
-              "properties": {
-                "title": "Voltaire St & Mendocino St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10020"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.23556667",
-                  "32.80087716"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Lamont St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10023"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.23353563",
-                  "32.74286905"
-                ]
-              },
-              "properties": {
-                "title": "Voltaire St & San Clemente St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10024"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.23174882",
-                  "32.8017129"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Noyes St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10025"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22970402",
-                  "32.73814733"
-                ]
-              },
-              "properties": {
-                "title": "Chatsworth Bl & Tennyson St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10026"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22929493",
-                  "32.74025595"
-                ]
-              },
-              "properties": {
-                "title": "Voltaire St & Poinsettia Dr",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10027"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22673314",
-                  "32.75266115"
-                ]
-              },
-              "properties": {
-                "title": "West Point Loma Bl & Adrian St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10029"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.2265353",
-                  "32.72894288"
-                ]
-              },
-              "properties": {
-                "title": "Nimitz Bl & Rosecrans St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10031"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22584945",
-                  "32.80091313"
-                ]
-              },
-              "properties": {
-                "title": "Grand Av & Culver St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "info",
-
-                }
-              },
-              "id": "10032"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22407745",
-                  "32.75340225"
-                ]
-              },
-              "properties": {
-                "title": "West Point Loma Bl & Loma Riviera Dr",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "unknown",
-
-                }
-              },
-              "id": "10033"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22518324",
-                  "32.86829317"
-                ]
-              },
-              "properties": {
-                "title": "Nobel Dr & Lebon Dr",
-                "marker-icon": {
-                  "icon-base": "custom-icon",
-                  "icon-type": "px-nav:unconfirmed",
-                  "icon-strokeColor": "blue",
-                  "icon-fillColor": "white",
-                  "icon-content": "px-nav:home"
-                }
-              },
-              "id": "10034"
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  "-117.22121375",
-                  "32.805504"
-                ]
-              },
-              "properties": {
-                "title": "Garnet Av & Bond St",
-                "marker-icon": {
-                  "icon-base": "static-icon",
-                  "icon-type": "warning",
-
-                }
-              },
-              "id": "10036"
-            }
-          ]
-        }
+      fitToMarkersZoom: {
+        type: String,
+        inputType: 'dropdown',
+        inputChoices: ['min', 'max', 'auto'],
+        defaultValue: 'auto'
       },
 
       parentComponent: {
-        value: ['<div style="height:400px; width:600px; display:flex"><px-map fit-to-markers flex-to-size disable-scroll-zoom disable-touch-zoom>', '</px-map></div>']
+        value: ['<div style="height:400px; width:600px; display:flex"><px-map >', '</px-map></div>']
       },
 
       siblingElement: {

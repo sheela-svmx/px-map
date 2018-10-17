@@ -72,6 +72,12 @@ limitations under the License.
       <li><button id="markerOne">Marker One</button></li>
       <li><button id="markerTwo">Marker Two</button></li>
       <li><button id="markerThree">Marker Three</button></li>
+      <li><button id="updateData">Update Data</button></li>
+      <li><button id="markerFour">Marker Four</button></li>
+      <li><button id="markerFive">Marker Five</button></li>
+    </ul>
+    <ul>
+      <li><button id="markerCloseAllPopups">Marker - Close All Popups</button></li>
     </ul>
   </section>
   <script>
@@ -700,6 +706,76 @@ limitations under the License.
           }
         ]
       };
+      var featCollection1 = {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -121.9588851928711,
+                37.77926289427511
+              ]
+            },
+            "properties": {
+            "title": "Cabrillo National Monument",
+            "marker-icon": {
+              "icon-base": "static-icon",
+              "icon-type": "warning"
+            },
+            "marker-popup": {
+              "popup-base": "data-popup",
+              "popup-title": "Cabrillo National Monument",
+              "popup-data": {
+                "LAT": "37.77926289427511",
+                "LNG": "-121.9588851928711",
+                "STATE": "warning"
+              }
+            }
+          },
+          "id": "101"
+          },
+          {
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -121.9588851928711,
+                37.77926289427511
+              ]
+            },
+            "properties": {
+              "title": "Nobel Dr & Lebon Dr",
+              "marker-icon": { "icon-base": "static-icon", "icon-type": "unknown" }
+            },
+            "id": "102"
+          },
+          {
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -121.8929672241211,
+                37.734340111555134
+              ]
+            },
+            "properties": {
+              "title": "Cabrillo National Monument",
+              "marker-icon": {
+                "icon-base": "static-icon",
+                "icon-type": "warning"
+              },
+              "marker-popup" : {
+                "popup-base": "info-popup",
+                "popup-title": "Cabrillo National Monument",
+                "popup-description" : "Lorem ipsum dot sit amet, colloquas..."
+              }
+            },
+            "id": "103"
+          }
+        ]
+      };
       tmpl.mapMove = function(evt) {
         var markers = Polymer.dom(evt).rootTarget.getVisibleMarkers();
         console.log('There are ' + markers.length + ' markers visible on the map.');
@@ -724,6 +800,12 @@ limitations under the License.
         this.classList.toggle("highlight-item");
       });
 
+      // reset opened prop to null so, popups on mapInst are closed
+      const markerCloseAllPopups = document.getElementById('markerCloseAllPopups');
+      markerCloseAllPopups.addEventListener('click', function() {
+        pxMarkerGroup.opened = null;
+      });
+
       // marker in a cluster
       document.getElementById('markerTwo').addEventListener('click', function() {
         const [LNG, LAT] = featCollection.features[1].geometry.coordinates;
@@ -739,6 +821,34 @@ limitations under the License.
       document.getElementById('markerThree').addEventListener('click', function() {
         const [LNG, LAT] = featCollection.features[5].geometry.coordinates;
         const { id } = featCollection.features[5];
+        if(!LAT || !LNG) return;
+        pxMap.lat = LAT;
+        pxMap.lng = LNG;
+        pxMap.zoom = 17; //single marker centered to map
+
+        pxMarkerGroup.opened = id;
+      });
+
+      // update data
+      document.getElementById('updateData').addEventListener('click', function() {
+        pxMarkerGroup.data = featCollection1;
+      });
+
+      // marker after data update(clustering)
+      document.getElementById('markerFour').addEventListener('click', function() {
+        const [LNG, LAT] = featCollection1.features[0].geometry.coordinates;
+        const { id } = featCollection1.features[0];
+        if(!LAT || !LNG) return;
+        pxMap.lat = LAT;
+        pxMap.lng = LNG;
+        pxMap.zoom = 17; //single marker centered to map
+
+        pxMarkerGroup.opened = id;
+      });
+      // marker after data update(non-clustering)
+      document.getElementById('markerFive').addEventListener('click', function() {
+        const [LNG, LAT] = featCollection1.features[2].geometry.coordinates;
+        const { id } = featCollection1.features[2];
         if(!LAT || !LNG) return;
         pxMap.lat = LAT;
         pxMap.lng = LNG;

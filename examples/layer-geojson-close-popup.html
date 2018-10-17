@@ -1,0 +1,593 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Map Demo -- Simple Layer GeoJSON</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html" />
+
+  <!-- Importing px-map subcomponents... -->
+  <link rel="import" href="../px-map.html" />
+  <link rel="import" href="../px-map-tile-layer.html" />
+  <link rel="import" href="../px-map-layer-geojson.html" />
+
+  <style>
+    body {
+      margin: 0;
+    }
+    .wrap {
+      display: flex;
+      height: 100vh;
+    }
+    .nav-link {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: white;
+      z-index: 999;
+    }
+    .nav-link ul {
+      padding: 0;
+      margin: 20px;
+    }
+    .nav-link ul li {
+      list-style-type: none;
+      padding: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="wrap">
+    <dom-bind>
+      <template is="dom-bind">
+        <px-map flex-to-size>
+          <px-map-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-map-tile-layer>
+          <px-map-layer-geojson id="pxLayerGeoJson" data="{{geoJSONLine}}" feature-style='{"color": "purple", "fillColor": "purple", "fillOpacity": "0.3"}'
+            show-feature-properties>
+          </px-map-layer-geojson>
+        </px-map>
+      </template>
+    </dom-bind>
+  </section>
+  <section class="nav-link">
+    <ul>
+      <li><button id="updateData">Update</button></li>
+    </ul>
+  </section>
+</body>
+
+</html>
+
+<script>
+  var tmplQuery = Polymer.Element ? 'dom-bind' : 'template[is=dom-bind]';
+  var tmpl = document.querySelector(tmplQuery);
+
+  document.addEventListener('WebComponentsReady', function () {
+    const geoJSONLine = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": "cdf6ba8e-5b16-470b-a423-30a5930e4129",
+          "properties": {
+            "Drive Time": "42 minutes",
+            "Mileage": "25.05 miles",
+            "style": {
+              "color": "#748b99"
+            }
+          },
+          "customPopup": {
+            "minWidth": 300,
+            "maxWidth": 400,
+            "margin": "0 15px",
+            "content": "<p>Custom content</p>"
+          },
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -122.385787,
+                37.617906
+              ],
+              [
+                -122.385787,
+                37.617906
+              ],
+              [
+                -122.397028,
+                37.614992
+              ],
+              [
+                -122.405793,
+                37.64115
+              ],
+              [
+                -122.406318,
+                37.656503
+              ],
+              [
+                -122.391924,
+                37.670583
+              ],
+              [
+                -122.38826,
+                37.678275
+              ],
+              [
+                -122.395635,
+                37.711616
+              ],
+              [
+                -122.407937,
+                37.738197
+              ],
+              [
+                -122.402811,
+                37.752551
+              ],
+              [
+                -122.406285,
+                37.760253
+              ],
+              [
+                -122.405882,
+                37.77482
+              ],
+              [
+                -122.354304,
+                37.817418
+              ],
+              [
+                -122.306246,
+                37.824581
+              ],
+              [
+                -122.296727,
+                37.819827
+              ],
+              [
+                -122.304539,
+                37.810668
+              ],
+              [
+                -122.302664,
+                37.804026
+              ],
+              [
+                -122.296864,
+                37.801782
+              ],
+              [
+                -122.290882,
+                37.803417
+              ],
+              [
+                -122.273042,
+                37.797618
+              ],
+              [
+                -122.278454,
+                37.787141
+              ],
+              [
+                -122.272743,
+                37.773236
+              ],
+              [
+                -122.276773,
+                37.773758
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "e9716836-709c-45a9-abe1-df4c46e02117",
+          "properties": {
+            "Drive Time": "15 minutes",
+            "Mileage": "7.36 miles"
+          },
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -122.276773,
+                37.773758
+              ],
+              [
+                -122.276773,
+                37.773758
+              ],
+              [
+                -122.27654,
+                37.788259
+              ],
+              [
+                -122.270869,
+                37.797692
+              ],
+              [
+                -122.268474,
+                37.79706
+              ],
+              [
+                -122.27866,
+                37.800254
+              ],
+              [
+                -122.279973,
+                37.802579
+              ],
+              [
+                -122.267345,
+                37.8233
+              ],
+              [
+                -122.254365,
+                37.819249
+              ],
+              [
+                -122.249497,
+                37.810831
+              ],
+              [
+                -122.229127,
+                37.800471
+              ],
+              [
+                -122.230953,
+                37.797473
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "63faade9-0c2d-4a08-8775-618e4dfb44ea",
+          "properties": {
+            "Drive Time": "40 minutes",
+            "Mileage": "25.94 miles"
+          },
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -122.230953,
+                37.797473
+              ],
+              [
+                -122.230953,
+                37.797473
+              ],
+              [
+                -122.236633,
+                37.797619
+              ],
+              [
+                -122.230769,
+                37.80289
+              ],
+              [
+                -122.249143,
+                37.810838
+              ],
+              [
+                -122.255539,
+                37.820273
+              ],
+              [
+                -122.281622,
+                37.827512
+              ],
+              [
+                -122.294256,
+                37.828043
+              ],
+              [
+                -122.35047,
+                37.819121
+              ],
+              [
+                -122.360562,
+                37.814332
+              ],
+              [
+                -122.390964,
+                37.786036
+              ],
+              [
+                -122.40638,
+                37.774918
+              ],
+              [
+                -122.406449,
+                37.76007
+              ],
+              [
+                -122.403014,
+                37.752311
+              ],
+              [
+                -122.409293,
+                37.735242
+              ],
+              [
+                -122.415275,
+                37.732211
+              ],
+              [
+                -122.431823,
+                37.732295
+              ],
+              [
+                -122.442722,
+                37.728794
+              ],
+              [
+                -122.453836,
+                37.712089
+              ],
+              [
+                -122.466012,
+                37.710166
+              ],
+              [
+                -122.471288,
+                37.705885
+              ],
+              [
+                -122.472573,
+                37.676403
+              ],
+              [
+                -122.476355,
+                37.671451
+              ],
+              [
+                -122.484676,
+                37.669156
+              ],
+              [
+                -122.484209,
+                37.659172
+              ],
+              [
+                -122.491338,
+                37.656381
+              ],
+              [
+                -122.490247,
+                37.636511
+              ],
+              [
+                -122.489765,
+                37.640354
+              ],
+              [
+                -122.487522,
+                37.639765
+              ]
+            ]
+          }
+        }
+      ]
+    };
+
+    const geoJSONLineNew = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": "8e4924de-e219-4af5-ae9d-205a838979f4",
+          "properties": {
+            "style": {
+              "color": "var(--internal-px-map-icon-info-color)"
+            }
+          },
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -121.971807,
+                37.389933
+              ],
+              [
+                -121.961344,
+                37.387671
+              ],
+              [
+                -121.964918,
+                37.381291
+              ],
+              [
+                -121.91568,
+                37.371364
+              ],
+              [
+                -121.901108,
+                37.363219
+              ],
+              [
+                -121.923508,
+                37.457621
+              ],
+              [
+                -121.934605,
+                37.480579
+              ],
+              [
+                -121.983328,
+                37.520262
+              ],
+              [
+                -122.015984,
+                37.537906
+              ],
+              [
+                -122.028537,
+                37.554297
+              ],
+              [
+                -122.04439,
+                37.569508
+              ],
+              [
+                -122.059194,
+                37.598362
+              ],
+              [
+                -122.081633,
+                37.596371
+              ]
+            ]
+          },
+          "customPopup": {
+            "content": "<span style=\"display: block;text-align: center; font-size: 13px;\">25.55 miles (Unknown)</span>",
+            "margin": "10px",
+            "maxWidth": 400,
+            "minWidth": 100
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "d0deb0eb-6a3c-4283-87f1-4893c50be2bd",
+          "properties": {
+            "style": {
+              "color": "#007acc"
+            }
+          },
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -122.081633,
+                37.596371
+              ],
+              [
+                -122.083823,
+                37.597931
+              ],
+              [
+                -122.081892,
+                37.59636
+              ],
+              [
+                -122.060433,
+                37.59729
+              ],
+              [
+                -122.050444,
+                37.583664
+              ],
+              [
+                -122.044592,
+                37.569404
+              ],
+              [
+                -122.028741,
+                37.554197
+              ],
+              [
+                -122.01571,
+                37.537372
+              ],
+              [
+                -121.983278,
+                37.519959
+              ],
+              [
+                -121.935852,
+                37.48221
+              ],
+              [
+                -121.923752,
+                37.457552
+              ],
+              [
+                -121.91879,
+                37.430528
+              ],
+              [
+                -121.910704,
+                37.408304
+              ],
+              [
+                -121.901349,
+                37.36864
+              ],
+              [
+                -121.903292,
+                37.363693
+              ],
+              [
+                -121.873373,
+                37.359517
+              ],
+              [
+                -121.854129,
+                37.340336
+              ],
+              [
+                -121.868953,
+                37.329432
+              ],
+              [
+                -121.887846,
+                37.325002
+              ],
+              [
+                -121.892138,
+                37.325552
+              ],
+              [
+                -121.895916,
+                37.330552
+              ],
+              [
+                -121.896584,
+                37.333333
+              ],
+              [
+                -121.890603,
+                37.336182
+              ]
+            ]
+          },
+          "customPopup": {
+            "content": "<span style=\"display: block;text-align: center; font-size: 13px;\">27.77 miles (Unknown)</span>",
+            "margin": "10px",
+            "maxWidth": 400,
+            "minWidth": 100
+          }
+        }
+      ]
+    };
+
+    tmpl.geoJSONLine = geoJSONLine;
+
+    // update geoJSONLine data
+    var pxLayerGeoJson = document.getElementById('pxLayerGeoJson');
+    document.getElementById('updateData').addEventListener('click', function () {
+      tmpl.geoJSONLine = geoJSONLineNew;
+    });
+
+  });
+</script>
