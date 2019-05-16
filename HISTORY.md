@@ -1,3 +1,8 @@
+v3.4.1
+===================
+## Bug Fix:
+* Fix provided for static marker being off when rendered in RTL. Added a left 0 to the botton icon.
+
 v3.4.0
 ===================
 ## New features:
